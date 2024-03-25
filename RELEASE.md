@@ -23,7 +23,7 @@ $ git commit -m "Release 0.12.1" Makefile
 3) Get AWS keys to sign *and* upload the extension
 
 For all the informations about how to sign the extension, and get keys, see:
-  https://mana.mozilla.org/wiki/display/SVCOPS/Sign+a+Mozilla+Internal+Extension
+  https://mana.mozilla.org/wiki/display/SRE/Sign+a+Mozilla+Internal+Extension
 To get keys used for uploading the extension, please use this bug as a template for you:
   https://bugzilla.mozilla.org/show_bug.cgi?id=1481123
 
