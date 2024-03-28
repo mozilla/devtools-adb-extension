@@ -1,0 +1,39 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+
+loader: xpi_taskgraph.single_dep:loader
+
+kind-dependencies:
+    - build
+
+transforms:
+    - xpi_taskgraph.linter:transforms
+    - taskgraph.transforms.job:transforms
+    - taskgraph.transforms.task:transforms
+
+task-template:
+    description: Run addons-linter
+    worker-type: b-linux
+    worker:
+        max-run-time: 7200
+        docker-image:
+            indexed: xpi.cache.level-3.docker-images.v2.node-16.latest
+        volumes:
+            - /builds/worker/checkouts
+    run:
+        using: run-task
+        cache-dotcache: false
+        checkout:
+            xpi: {}
+        use-caches: false
+        cwd: '{checkout}'
+        # TODO: We should enable MV3 when we are ready to accept MV3 add-ons.
+        # This should be done by replacing `2` with `3` in the command below.
+        command: >-
+            curl -sSL --fail --retry 3 -o {xpi_file} "$XPI_URL" &&
+            npx -y addons-linter --privileged --boring --disable-xpi-autoclose --max-manifest-version=2 {xpi_file}
+
+    attributes:
+        code-review: true
